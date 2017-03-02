@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billboard</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/billboard.css' %}">
+</head>
+<body>
+<div class = "page-header">
+    <p class = "top-menu">Hello {{ user.username }}
+    <small>(<a href="{% url 'logout'%}">Logout</a>)</small></p>
+    <h1><a href = "/"></a></h1>
+    </div>
+<div class = "container">
+    <div class = "row">
+        <div class="col col-md-12">
+            <h1>Billboard</h1>
+        </div>
+    </div>
+{% block content %}
+    {%if post_list%}
+    <div class = "row">
+        {%for post in post_list%}
+        <div class="col col-md-12">
+            <fieldset class = " new_entry entry_layout">
+                <legend class = "date" {{ post.date }}>
+                    <script> document.write(new Date().toLocaleDateString()); </script>
+                </legend>
+                <div id = "entry_title">{{ post.title }}</div>
+                <div id = "entry_message" >{{ post.text }}</div>
+                <div id = "entry_author">{{ post.author }}</div>
+            </fieldset>
+        </div>
+        <form action = "delete_message" method = "post" class = "delete_entry">
+            {% csrf_token %}
+            <input type="submit" name="delete" value="delete" class = "button">
+            <input type="hidden" name="delete" value="{{ post.id }}">
+        </form>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class = "row">
+        <div>
+            <p class = "initial_no_message">No messages... <br>Click the '+' button to add a new message</p>
+        </div>
+    {%  endif %}
+{% endblock %}
+        <div class="col col-md-12 hide_on_page_load">
+            <form  action='submit_message' method="post" class = "new_entry_form" >
+                {% csrf_token %}
+                <div class = "container_for_new">
+                    <label for = "title">Title:</label>
+                    <input id="title" type="text" name="title">
+                    <label for = "message">Your message here:</label>
+                    <textarea id="message" type="text" name="message"></textarea>
+                    <label for = "author" class = "author">Author:</label>
+                    <input class="author" type="text" name="author">
+                </div>
+                <div class = "button-container">
+                    <input type="submit" value=" - " class = "button" id = "delete_button">
+                    <input type="submit" value="+" class = "button" id = "entry_button">
+                </div>
+            </form>
+
+
+            </div>
+        </div>
+        <div class = "row">
+            <fieldset>
+                <div class="col col-md-12 button-container">
+                    <button type="button" class = "button" id = "add-btn">&#10010</button>
+                </div>
+            </fieldset>
+        </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="{% static 'js/billboard.js' %}">
+</script>
+
+</body>
+</html>

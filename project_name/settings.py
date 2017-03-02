@@ -29,6 +29,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'billboard.apps.BillboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +40,10 @@ INSTALLED_APPS = [
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'social_django',
+    'social.apps.django_app.default',
+
+
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -51,9 +56,12 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware'
 ]
 
-ROOT_URLCONF = '{{ project_name }}.urls'
+ROOT_URLCONF = 'project_name.urls'
+
+
 
 TEMPLATES = [
     {
@@ -66,13 +74,23 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
             'debug': DEBUG,
         },
     },
 ]
 
-WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+WSGI_APPLICATION = 'project_name.wsgi.application'
 
 
 # Database
@@ -104,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jerusalem'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -133,3 +151,13 @@ STATICFILES_DIRS = [
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+LOGIN_REDIRECT_URL = 'post_list'
+LOGIN_URL = 'login'
+
+SOCIAL_AUTH_TWITTER_KEY = 'CPkhWJvJBflaqsPprdwDCNqui'
+SOCIAL_AUTH_TWITTER_SECRET = 'ksPkek2fGAVmiduTwKoeziQGghC4pZYUir3l7d8bpXXQ8gKkop'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/billboard'
+
+SOCIAL_AUTH_LOGIN_URL = '/'

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billboard</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/billboard.css' %}">
+</head>
+<body>
+    <div class = "page-header">
+        {% if user.is_authenticated %}
+        <a href ="{% url 'get_new_entry' %}" class = "top-menu"><span class = "glyphicon glyphicon-lock"></span></a>
+        <p class = "top-menu">Hello {{ user.username }}
+        <small>(<a href="{% url 'logout'%}">Logout</a>)</small></p>
+        {% else %}
+        <a href ="{% url 'login' %}" class = "top-menu"><span class = "glyphicon glyphicon-lock"></span></a>
+        <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}" class="top-menu">Login with Twitter</a>
+        {% endif %}
+        <h1><a href = "/">Billboard</a></h1>
+    </div>
+    <div class = "content container">
+        <div class = "row">
+            <div class = "col-md-8">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
